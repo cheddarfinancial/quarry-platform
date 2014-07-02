@@ -5,7 +5,7 @@ from functools import wraps
 # Third Party
 import mixingboard
 import requests
-from chassis.models import Bill, Token, User 
+from chassis.models import Token, User 
 from flask import Blueprint, request, jsonify
 from jinja2 import TemplateNotFound
 
@@ -70,18 +70,6 @@ def auth():
         return jsonify({
             "error": "Your password is incorrect"
         }), 400
-
-
-@api.route('/current_bill')
-@requiresToken
-def current_bill(user):
-
-    bill = Bill.query.filter(Bill.account_id == user.account_id) \
-                .order_by(Bill.period.desc()).first()
-
-    return jsonify({
-        "bill": bill.dict() if bill else None
-    })
 
 
 @api.route('/user')

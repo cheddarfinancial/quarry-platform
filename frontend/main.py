@@ -12,10 +12,8 @@ from functools import wraps
 # Third Party
 import requests
 import mixingboard
-from chassis.aws import runBillingReport
 from chassis.database import db_session
-from chassis.models import User, Account, JobHistory, Notification, Bill, \
-                  Token
+from chassis.models import User, Account, JobHistory, Notification, Token
 from flask import Flask, redirect, jsonify, render_template, request, \
                   session, url_for
 from sqlalchemy import or_

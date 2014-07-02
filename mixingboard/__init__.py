@@ -583,7 +583,8 @@ def monitor(userData=None):
                 cluster=cluster,
                 iam_username=iam_username,
                 access_key_id=access_key_id,
-                access_key_secret=access_key_secret
+                access_key_secret=access_key_secret,
+                zk_hosts="|".join(zk_hosts)
             ))
 
         # the job server does the master look up on its own,

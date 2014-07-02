@@ -13,6 +13,7 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
 # Local
+import mixingboard
 from ..database import Base
 from ..aws import getS3Conn
 from ..util import makeHandle

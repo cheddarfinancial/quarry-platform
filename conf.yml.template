@@ -1,40 +1,58 @@
+# 
 zk-hosts:
     - zk1.example.com
     - zk2.example.com
     - zk3.example.com
 
+# Quarry launches instances within a private vpc and subnet
+# These can be created on EC2
 default_vpc: "vpc-123456789"
 default_subnet: "subnet-123456789"
 
+# Quarry uses mysql to store table information. The user accessing
+# this MySQL instances need the ability to create new databases and
+# users
 hive_db_root:
     host: "hive-db.example.com"
     password: "user"
     user: "password"
 
-rabbitmq:
-    host: "rabbit.example.com"
-    port: "5672"
-
-redis:
-    host: "redis.example.com"
-    port: "6379"
-
-spark_ami: "ami-12345678"
-
+# MySQL database for user data. Can be the same as the hive_db.
+# Ideally, the user for this connection should only have access to
+# the `user` database.
 user_db:
     database: "user"
     host: "user-db.example.com"
     user: "user"
     password: "password"
 
+# For use in the workflow tool
+rabbitmq:
+    host: "rabbit.example.com"
+    port: "5672"
+
+# For use in the workflow tool
+redis:
+    host: "redis.example.com"
+    port: "6379"
+
+# The spark AMI to use when launching cluster instances. By default,
+# a quarry provided AMI will be used. You shouldn't need to change this.
+spark_ami: "ami-12345678"
+
+# The security group that the
 webserver_sg: "sg-12345678"
 
+# The security group your zookeeper instances are running in
 zookeeper_sg: "sg-12345678"
 
+# The s3 bucket to hold your data in
 s3_bucket: "s3-bucket-name"
 
+# The Amazon access credentials to use when launching your clusters and creating
+# IAM users
 aws_key: "aws-key-id"
 aws_secret: "aws-key-secret"
 
+# The key pair to use when launching new instances
 key_pair: "key-pair-name"
-~

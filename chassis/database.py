@@ -68,7 +68,6 @@ def init_db():
 
     # import all models before you call this
     from models.account import Account
-    from models.bill import Bill
     from models.datajob import DataJob
     from models.job import Job
     from models.jobhistory import JobHistory
