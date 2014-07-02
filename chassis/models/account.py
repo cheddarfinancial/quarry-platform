@@ -120,12 +120,15 @@ class Account(Base):
 
         # authorize job server ports
         securityGroup.authorize('tcp', '1989', '1989', src_group=webserverGroup)
+        securityGroup.authorize('tcp', '1989', '1989', cidr_ip="0.0.0.0/0") # FIXME TOO OPEN, ONLY NEEDED FOR LOCAL
 
         # authorize 100 spark context ports 
         securityGroup.authorize('tcp', '4040', '4140', src_group=webserverGroup)
+        securityGroup.authorize('tcp', '4040', '4140', cidr_ip="0.0.0.0/0") # FIXME TOO OPEN, ONLY NEEDED FOR LOCAL
 
         # authorize 100 spark master/worker ports 
         securityGroup.authorize('tcp', '8080', '8180', src_group=webserverGroup)
+        securityGroup.authorize('tcp', '8080', '8180', cidr_ip="0.0.0.0/0") # FIXME TOO OPEN, ONLY NEEDED FOR LOCAL
 
         # open up ports for streamers 
         securityGroup.authorize('tcp', '8888', '8988', cidr_ip="0.0.0.0/0")
