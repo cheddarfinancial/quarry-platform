@@ -1,0 +1,10 @@
+
+<div class='form-group'>
+    <label class='control-label'>Choose A Cluster</label>
+    <input disabled ng-if='status' placeholder='{{status}}' type='text' class='form-control'>
+    <select class='form-control' ng-hide='status' ng-model='selectedCluster' ng-change="onSelectCluster(selectedCluster)" ng-options="id as ( id + ' (' + info.status+ ')' ) for (id, info) in clusters"></select>
+    {{ hideWarning }} 
+    <span class='text-warning' ng-if='!hideWarning && selectedCluster && !clusters[selectedCluster].alive'>
+        <i class='fa fa-asterisk'></i> You must wait until a cluster is launched to be able to use it.
+    </span>
+</div>

@@ -1,0 +1,35 @@
+<div class='loader-wrap' ng-if='loadingJobs'>
+    <div class='loader'></div>
+    <div class='loader-status'>
+        Loading Saved Jobs... 
+    </div>
+</div>
+
+<table class='table table-striped' ng-if="!loadingJobs">
+    <thead>
+        <tr>
+            <th class='col-lg-5'>Job Title</th>
+            <th class='col-lg-5'>Description</th>
+            <th class='col-lg-2'></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat='job in jobs'>
+            <td>{{ job.title }}</td>
+            <td>{{ job.description }}</td>
+            <td><a ng-click='pickJob(job)' class='fa fa-check-circle-o'> Select</a></td>
+        </tr>
+        <tr ng-if='!jobs.length'>
+            <td colspan=6>No saved jobs</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class='pager' ng-if='!loadingJobs'>
+    <li ng-if='pageBackward'>
+        <a ng-click='fetchJobs(-stepSize)'><span class='fa fa-angle-left'></span> Previous</a>
+    </li>
+    <li ng-if='pageForward'>
+        <a ng-click='fetchJobs(stepSize)'>Next <span class='fa fa-angle-right'></span></a>
+    </li>
+</ul>

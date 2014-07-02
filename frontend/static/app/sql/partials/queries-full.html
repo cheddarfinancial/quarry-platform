@@ -1,0 +1,48 @@
+<div class='loader-wrap' ng-if='loadingQueries'>
+    <div class='loader'></div>
+    <div class='loader-status'>
+        Loading Saved Queries...        
+    </div>
+</div>
+
+<table class='table table-striped' ng-if='!loadingQueries'>
+    <thead>
+        <tr>
+            <th class='col-lg-2'>Job Title</th>
+            <th class='col-lg-3'>SQL</th>
+            <th class='col-lg-1'>User</th>
+            <th class='col-lg-2'>Description</th>
+            <th class='col-lg-2'>Created</th>
+            <th class='col-lg-2'>Last Edited</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat='query in queries'>
+            <td>
+                {{query.title}}
+                <ul class='list-unstyled list-inline'>
+                    <li><a ui-sref="sql.editor({ queryId: query.id })" class='fa fa-edit'> Edit</a></li>
+                    <li><a ui-sref="sql.editor({ queryId: query.id, run: 1 })" class='fa fa-flash'> Run</a></li>
+                    <li><a ng-click="deleteQuery(query.id)" class='fa fa-times-circle'> Delete</a></li>
+                </ul>
+            </td>
+            <td>{{ query.sql }}</td>
+            <td>{{ query.user.name }}</td>
+            <td>{{ query.description }}</td>
+            <td>{{ query.created }}</td>
+            <td>{{ query.updated }}</td>
+        </tr>
+        <tr ng-if='!queries.length'>
+            <td colspan=6>No saved queries. <a ui-sref='sql.editor'>Go create one now!</a></td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class='pager' ng-if='!loadingQueries'>
+    <li ng-if='pageBackward'>
+        <a ng-click='fetchQueries(-stepSize)'><span class='fa fa-angle-left'></span> Previous</a>
+    </li>
+    <li ng-if='pageForward'>
+        <a ng-click='fetchQueries(stepSize)'>Next <span class='fa fa-angle-right'></span></a>
+    </li>
+</ul>

@@ -1,0 +1,6 @@
+src/
+*.pyc
+.DS_Store
+.sass-cache
+
+mixingboard.yml

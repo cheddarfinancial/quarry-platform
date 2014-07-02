@@ -1,0 +1,147 @@
+<!-- QUERY EDITOR -->
+<!-- Use ng-style instead of ng-if because ng-if messes up codemirror -->
+<div class='row-fluid bottom-1' ng-style='{ "display": ((showEditor) ? "block" : "none") }'>
+
+    <div class='col-lg-3'>
+
+        <div class='list-group'>
+            <a class='list-group-item active'>Query Settings</a>
+            <span class='list-group-item'>
+                <div cluster-manager on-select='selectedCluster' on-empty='noClusters'></div>
+            </span>
+            <span class='list-group-item form-group'>
+                <label class='control-label'>Job Priority</label>
+                <select class='form-control' ng-model='priority'>
+                    <option value='verylow'>Very Low</option>
+                    <option value='low'>Low</option>
+                    <option value='default'>Default</option>
+                    <option value='high'>High</option>
+                    <option value='veryhigh'>Very High</option>
+                </select>
+            </span>
+            <span class='list-group-item form-group'>
+                <label class='control-label'>Job Name</label>
+                <input class='form-control' ng-model='jobName' placeholder="Untitled"></input>
+            </span>
+        </div>
+
+        <div class='list-group'>
+            <a class='list-group-item active'>Tables</a>
+            <span ng-repeat="table in tables" class='list-group-item'>
+                <a ng-click='descTable(table)' class='fa' ng-class='(table.showingSchema || table.loadingSchema) ? "fa-caret-down" : "fa-caret-right"'> {{ table.name }}</a>
+                <div loader enabled='table.loadingSchema'></div>
+                <div class='row' ng-if="table.schema && table.showingSchema">
+                    <div class='col-lg-12'>
+                        <table class="table table-striped table-hover">
+                           <thead>
+                                <tr>
+                                    <th>Column Name</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat='column in table.schema.columns'>
+                                    <td>{{ column.name }}</td>
+                                    <td>{{ column.type }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class='col-lg-6'>
+                        <button class='btn btn-info btn-block' ng-if='!table.schema.cached' ng-click="cacheTable(table)">Cache</button>
+                        <button class='btn btn-info btn-block' ng-if='table.schema.cached' ng-click="uncacheTable(table)">Uncache</button>
+                    </div>
+                    <div class='col-lg-6'>
+                        <button class='btn btn-danger btn-block' ng-click="dropTable(table)">Drop Table</button>
+                    </div>
+                </div>
+            </span>
+            <div class='list-group-item loader-wrap' ng-if="!tables">
+                <div class='loader'></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-lg-9'>
+
+        <div class='alert alert-dismissable alert-danger' ng-if='error'>
+            <button type="button" class="close" ng-click='dismissError()'>×</button>
+            {{ error }}
+        </div>
+
+        <div class='col-lg-12 well'>
+            <div class='form-group'>
+                <div class='col-lg-12'>
+                    <ui-codemirror ui-codemirror-opts="sqlEditorOptions" ng-model='sql'></ui-codemirror>
+                    <span class='help-block'>
+                        Enter your shark query here. For information on query syntax, refer to the
+                        <a target='_blank' href='https://cwiki.apache.org/confluence/display/Hive/LanguageManual'>
+                            Hive Language Manual
+                        </a>
+                        .
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!--
+        <div class='col-lg-12 well'>
+            <div class='form-group'>
+                <label for='python-box' class='col-lg-1 control-label'>Python Editor</label>
+                <div class='col-lg-11'>
+                    <ui-codemirror ui-codemirror-opts="pythonEditorOptions" ng-model='python'></ui-codemirror>
+                    <span class='help-block'>Enter your custom python functions here</span>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <div class='col-lg-9'>
+            <button ng-click="executeQuery(sql, python)" type="button" class="btn btn-primary btn-lg btn-block" ng-disabled='!cluster'>
+                Execute Query
+            </button>
+        </div>
+
+        <div class='col-lg-3'>
+            <button ng-click="saveQuery(sql, python)" type="button" class="btn btn-info btn-lg btn-block">
+                Save Query
+            </button>
+        </div>
+
+    </div>
+
+    <div ng-if='handle' class='col-lg-12'>
+        <hr/>
+    </div>
+
+</div>
+
+<!-- QUERY RESULTS -->
+<div class='row-fluid' ng-if='showResults'>
+
+    <div class="col-lg-3 bottom-1">
+        <button type="button" class="btn btn-primary btn-lg btn-block" ng-click='toggleEditor()'>
+            <span ng-if='!showEditor'>Show</span> 
+            <span ng-if='showEditor'>Hide</span> 
+            Editor
+        </button>
+    </div>
+
+    <div class="col-lg-3 bottom-1">
+        <button type="button" class="btn btn-danger btn-lg btn-block" ng-click='clearResults()'>Clear Results</button>
+    </div>
+
+</div>
+
+<div results-manager handle='handle'></div>
+
+<!-- QUERY LOADING -->
+<div class='row-fluid bottom-1 large-progress' ng-if='status'>
+
+    <div class='col-lg-12'>
+        <div loader enabled='status' message='status' task-progress="taskProgress" stage-progress='stageProgress'></div>
+    </div>
+
+</div>
+

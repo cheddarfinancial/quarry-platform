@@ -1,0 +1,44 @@
+<div class='row-fluid bottom-1'>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title ng-binding">Running Workflows</h3>
+        </div>
+
+        <table class='table table-striped' ng-if='!loadingWorkflows'>
+            <thead>
+                <tr>
+                    <th class='col-lg-4'>Name</th>
+                    <th class='col-lg-4'>Status</th>
+                    <th class='col-lg-4'>Current Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='workflow in workflows'>
+                    <td>
+                        <span ng-class='{ "text-muted": !workflow.title }'>{{ workflow.title || "No Name Given" }}</span>
+                        <ul class='list-unstyled list-inline'>
+                            <li><a ng-click='cancelWorkflow(workflow)' class='fa fa-times-circle'> Cancel</a>
+                        </ul>
+                    </td>
+                    <td>{{ workflow.message }}</td>
+                    <td>
+                        <div class="progress progress-small">
+                            <div class="progress-bar" ng-style="{ width : (workflow.stepsComplete/workflow.totalSteps*97+3)+'%' }"></div>
+                        </div>
+                        {{ workflow.stepsComplete }}/{{ workflow.totalSteps }} Steps Complete
+                    </td>
+                </tr>
+                <tr ng-if='!workflows.length'>
+                    <td>No workflows are currently running.</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div enabled="loadingWorkflows" message="'Loading workflows...'"></div>
+
+    </div>
+
+</div>

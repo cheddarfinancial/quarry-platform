@@ -1,0 +1,7 @@
+src/
+*.pyc
+.DS_Store
+.sass-cache
+
+conf.yml
+logs/

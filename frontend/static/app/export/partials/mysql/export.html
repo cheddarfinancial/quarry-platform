@@ -1,0 +1,186 @@
+<!-- ERROR DISPLAY -->
+<div class='row-fluid' ng-if='errors'>
+
+    <div class='alert alert-dismissable alert-danger'>
+        <button type="button" class="close" ng-click='dismissErrors()'>×</button>
+        <strong>Something went wrong!</strong>
+        <span ng-repeat="error in errors">
+            {{ error }}
+        </span>
+    </div>
+
+</div>
+
+<!-- PICK A CLUSTER -->
+<div class='row-fluid' ng-if='step == "cluster" && !status'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Choose a Cluster to Run Your Import On</h1>
+    </div>
+
+    <p class='lead col-lg-11 col-lg-offset-1'>
+        Your export will run in parallel across an entire cluster,
+        which will greatly reduce the time it takes to get your data
+        out of Quarry.
+    </p>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+        <div cluster-manager template='full' on-select='selectedCluster' on-empty='noClusters'></div>
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1' ng-show='cluster'>
+        <button ng-click='chooseCluster()' type='button' class='btn btn-primary btn-lg btn-block'>Choose Your Cluster</button>
+    </div>
+
+</div>
+
+<!-- CHOOSE DATASET TO export -->
+<div class='row-fluid' ng-if='step == "datasets" && !status'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Choose Dataset To Export</h1>
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1'>
+        <p class='lead'>
+            Below is a list of data sets that you can export from Quarry.
+        </p>
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th class='col-lg-9'>Dataset Name</th>
+                    <th class='col-lg-3'></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='dataset in datasets'>
+                    <td>{{ dataset }}</td>
+                    <td><a ng-click='chooseDataset(dataset)'>Setup Export <span class='fa fa-chevron-right'></span></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- SET UP CREDENTIALS -->
+<div class='row-fluid' ng-if='step == "connect" && !status'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Enter Your Database Credentials</h1>
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+
+        <div class='form-group'>
+            <label class='control-label col-lg-2' for='address'>Address</label>
+            <div class='col-lg-10'>
+                <input id='address' type='text' class='form-control' placeholder='Enter address' ng-model='address'/>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+
+        <div class='form-group'>
+            <label class='control-label col-lg-2' for='username'>Username</label>
+            <div class='col-lg-10'>
+                <input id='username' type='text' class='form-control' placeholder='Enter username' ng-model='username'/>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+
+        <div class='form-group'>
+            <label class='control-label col-lg-2' for='address'>Password</label>
+            <div class='col-lg-10'>
+                <input id='password' type='password' class='form-control' placeholder='Enter password' ng-model='password'/>
+                <span class='help-block'>
+                    Database credentials are used only to gather metadata to help set up the
+                    export process and to perform the export. We do not save your database
+                    credentials unless you explicitly specify that you want them to be saved.
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='page-header col-lg-12'>
+        <h1>Connect to Database</h1>
+    </div>
+
+    <p class='lead col-lg-11 col-lg-offset-1'>
+        We will now attempt to connect to your database in order to make sure your credentials are correct.
+    </p>
+
+    <div class='col-lg-11 col-lg-offset-1'>
+        <button ng-click='connectDatabase(address, username, password)' type='button' class='btn btn-primary btn-lg btn-block'>Connect To Database</button>
+    </div>
+
+</div>
+
+<!-- OPTIONS STEP -->
+<div ng-if='step == "exportOptions" && !status'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Export Options For <code>{{ dataset }}</code></h1>
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1'>
+        <p class='lead'>
+            You'll need to choose a database and table name to export yourfor your dataset in Quarry. We've chosen
+            one below based on the name of the dataset in your database, but you can change
+            it if you'd like.
+        </p>
+        <input type='text' class='form-control' placeholder='Pick A Table Name' ng-model='table'>
+        <input type='text' class='form-control' placeholder='Pick A Database Name' ng-model='database'>
+        <p class='lead'>
+            You should be ready to start the export process. Hit the big button below to
+            begin running your export.
+        </p>
+        <div class='col-lg-12'>
+            <div class='col-lg-3'>
+                <button ng-click='beginExport(database, table, true)' type='button' class='btn btn-info btn-lg btn-block'>
+                    Save Your Export Job
+                </button>
+            </div>
+            <div class='col-lg-9'>
+                <button ng-click='beginExport(database, table, flase)' type='button' class='btn btn-primary btn-lg btn-block'>
+                    Begin Exporting Your Data
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- OPTIONS STEP -->
+<div class='row-fluid bottom-1' ng-if='step == "success" && !status'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Success</h1>
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1'>
+        <p class='lead'>
+            Your data has successfully been exported to <code>{{ database }}.{{ table }}</code>
+            and is available for use in your application!
+        </p>
+        <button ui-sref='index' type='button' class='btn btn-primary btn-lg btn-block'>
+            Ok!
+        </button>
+    </div>
+
+</div>
+
+<!-- OPERATION LOADING -->
+<div class='row-fluid bottom-1 large-progress' ng-if='status'>
+
+    <div class='col-lg-12'>
+        <div loader enabled='status' message='status' task-progress="taskProgress" stage-progress='stageProgress'></div>
+    </div>
+
+</div>

@@ -1,0 +1,25 @@
+<!-- SPARK RESULTS -->
+<div class="page-header col-lg-12">
+    <h1>Results For '{{ jobName }}'</h1>
+</div>
+
+<div class='row-fluid' ng-if='results'>
+
+    <div class='col-lg-12 bottom-1'>
+        <a ng-click='downloadResults()' class='btn col-lg-3 btn-info btn-lg col-lg-offset-9'>Download Results</a>
+    </div>
+
+    <div class='well col-lg-12'>
+        <pre class='json-results'><code>{{ results }}</code></pre>
+    </div>
+
+</div>
+
+<!-- SPARK LOADING -->
+<div class='row-fluid bottom-1' ng-if='loadingResults'>
+
+    <div class='col-lg-12'>
+        <div loader enabled='loadingResults' message='"Loading results..."'></div>
+    </div>
+
+</div>

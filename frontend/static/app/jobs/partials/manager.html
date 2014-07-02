@@ -1,0 +1,82 @@
+<!-- SPARK EDITOR -->
+<!-- Use ng-style instead of ng-if because ng-if messes up codemirror -->
+<div class='row-fluid bottom-1'>
+
+    <div class='col-lg-2'>
+
+        <div class='list-group'>
+            <a class='list-group-item active'>Choose A Cluster</a>
+            <span class='list-group-item'>
+                <div cluster-manager on-select='selectedCluster' on-empty='noClusters'></div>
+            </span>
+        </div>
+
+    </div>
+
+    <div class='col-lg-10'>
+
+        <div class='alert alert-dismissable alert-danger' ng-if='error'>
+            <button type="button" class="close" ng-click='dismissError()'>×</button>
+            {{ error }}
+        </div>
+
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th class='col-lg-2'>Name</th>
+                    <th class='col-lg-1'>Status</th>
+                    <th class='col-lg-4'>Current Stage Progress</th>
+                    <th class='col-lg-4'>Overall Progress</th>
+                    <th class='col-lg-1'></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='(id, info) in progress.jobs'>
+                    <td ng-class='{ "text-muted": !info.name }'>{{ info.name || "No Name Given" }}</td>
+                    <td>
+                        <span ng-if="info.complete">
+                            <span class='text-danger' ng-if='info.failed'>
+                                Failed
+                            </span>
+                            <span class='text-success' ng-if='!info.failed'>
+                                Complete
+                            </span>
+                        </span>
+                        <span class='text-info' ng-if="!info.complete">
+                            Running
+                        </span>
+                    </td>
+                    <td>
+                        <span ng-if='!info.currentStage'>
+                            <div class="progress progress-small">
+                                <div class="progress-bar progress-bar-info" style="width: 100%;"></div>
+                            </div>
+                            There is no currently active stage
+                        </span>
+                        <span ng-if='info.currentStage'>
+                            <div class="progress progress-small">
+                                <div class="progress-bar progress-bar-info" ng-style="{ width : (info.currentStage.taskProgress*97+3)+'%' }"></div>
+                            </div>
+                            {{ info.currentStage.completeTasks }}/{{ info.currentStage.totalTasks }} Tasks Complete
+                        </span>
+                    </td>
+                    <td>
+                        <div class="progress progress-small">
+                            <div class="progress-bar" ng-style="{ width : (info.stageProgress*97+3)+'%' }"></div>
+                        </div>
+                        {{ info.completeStages }}/{{ info.totalStages }} Stages Complete
+                    </td>
+                    <td>
+                        <a ng-if='!info.complete' class='btn btn-danger btn-xs' ng-click='cancelJob(info.handle)'>
+                            Cancel
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div loader enabled='status' message='status'></div>
+
+    </div>
+
+</div>

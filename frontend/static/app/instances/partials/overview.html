@@ -1,0 +1,131 @@
+<div class='row-fluid'>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Running Clusters</h3>
+        </div>
+
+        <div class='loader-wrap' ng-if='loadingClusters'>
+            <div class='loader'></div>
+            <div class='loader-status'>
+                Fetching cluster list...        
+            </div>
+        </div>
+
+        <table class='table table-striped' ng-if="!loadingClusters">
+            <thead>
+                <th class='col-lg-2'>Name</th>
+                <th class='col-lg-2'>Overall Status</th>
+                <th class='col-lg-4'>Workers</th>
+                <th class='col-lg-1'>Spark Master</th>
+                <th class='col-lg-1'>Job Server</th>
+                <th class='col-lg-1'></th>
+                <th class='col-lg-1'></th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(id, info) in clusters">
+                    <td>
+                        <div>
+                            {{ id }}
+                        </div>
+                        <div class='text-muted'>
+                            Started at {{ info.created }}
+                        </div>
+                    </td>
+                    <td>
+                        <span ng-class='{ "text-success": info.alive, "text-info": !info.alive && !info.stopped, "text-danger": info.stopped }'>
+                            {{ info.status }}
+                        </span>
+                    </td>
+                    <td>
+
+                        <div ng-show='!editingWorkers[id].altering'>
+
+                            <div ng-show='!editingWorkers[id]'>
+                                {{ info.services['spark-worker'] || 0 }} / {{ info.workers }}
+                                <span ng-if="!info.stopped">
+                                    <span class='text-info' ng-if='info.workers > (info.services["spark-worker"] || 0)'>
+                                        Waiting for {{ info.workers - (info.services["spark-worker"] || 0) }} workers to launch
+                                    </span>
+                                    <span class='text-info' ng-if='(info.services["spark-worker"] || 0) > info.workers'>
+                                        Waiting for {{ (info.services["spark-worker"] || 0) - info.workers }} workers to shutdown
+                                    </span>
+                                </span>
+                                <span ng-if="info.stopped">
+                                    <span class='text-info' ng-if='info.services["spark-worker"]'>
+                                        Waiting for {{ info.services["spark-worker"] }} workers to shutdown
+                                    </span>
+                                </span>
+                            </div>
+                            <div ng-show='!editingWorkers[id]'>
+                                <a ng-click='alterWorkers(id, info.workers)' class='fa fa-pencil'> Add or Remove Workers</a>
+                            </div>
+
+                            <div ng-show='editingWorkers[id]' class='bottom-1'>
+                                <label class='control-label'>Change the Number of Workers</label>
+                                <input class='form-control bottom-1' type='text' ng-model='editingWorkers[id].workers' />
+                                <a ng-click='cancelUpdateWorkers(id)' class='btn btn-danger fa fa-times'> Cancel</a>
+                                <a ng-click='updateWorkers(id)' class='btn btn-primary fa fa-check'> Update</a>
+                            </div>
+
+                        </div>
+
+                        <div loader enabled='editingWorkers[id].altering' message='"Updating worker count..."'></div>
+
+                    </td>
+                    <td>
+                        <span ng-if='!info.stopped'>
+                            <span class='text-success' ng-if='info.services["spark-master"]'>
+                                Running
+                            </span>
+                            <span class='text-info' ng-if='!info.services["spark-master"]'>
+                                Launching
+                            </span>
+                        </span>
+                        <span ng-if='info.stopped'>
+                            <span class='text-danger'>
+                                Stopped
+                            </span>
+                        </span>
+                    </td>
+                    <td>
+                        <span ng-if='!info.stopped'>
+                            <span class='text-success' ng-if='info.services["job-server"]'>
+                                Running
+                            </span>
+                            <span class='text-info' ng-if='!info.services["job-server"]'>
+                                Launching
+                            </span>
+                        </span>
+                        <span ng-if='info.stopped'>
+                            <span class='text-danger'>
+                                Stopped
+                            </span>
+                        </span>
+                    </td>
+                    <td>
+                        <span ng-if='!info.stopped'>
+                            <div>
+                                <a ng-click='rebootCluster(id)'><i class='fa fa-refresh'></i> Reboot</a>
+                            </div>
+                            <div>
+                                <a ng-click='stopCluster(id)'><i class='fa fa-pause'></i> Stop</a>
+                            </div>
+                        </span>
+                        <span ng-if='info.stopped'>
+                            <a ng-click='startCluster(id)'><i class='fa fa-play'></i> Start</a>
+                        </span>
+                    </td>
+                    <td>
+                        <a ng-click='shutdownCluster(id)'><i class='fa fa-times-circle'></i> Shutdown</a>
+                    </td>
+                </tr>
+                <tr ng-if='!clusters'>
+                    <td colspan=10>No running clusters. <a ui-sref='instances.wizard'>Go create one now!</a></td>
+                </tr>
+            <tbody>
+        </table>
+
+    </div>
+
+</div>

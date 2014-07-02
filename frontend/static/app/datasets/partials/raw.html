@@ -1,0 +1,31 @@
+<div class='row-fluid'>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Raw Datasets</h3>
+        </div>
+
+        <div loader enabled='loadingHistory' message='"Loading history..."'></div>
+
+        <table class='table table-striped' ng-if='datasets.length'>
+            <thead>
+                <tr>
+                    <th class='col-lg-4'>Name</th>
+                    <th class='col-lg-4'>Created</th>
+                    <th class='col-lg-2'></th>
+                    <th class='col-lg-2'></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='dataset in datasets'>
+                    <td>{{ dataset.name }}</td>
+                    <td>{{ dataset.created }}</td>
+                    <td><a ui-sref='datasets.add_raw({ name: dataset.name })'>Add Files <i class='fa fa-plus-circle'></i></td>
+                    <td><a ui-sref='datasets.manage_raw({ name: dataset.name })'>Manage <i class='fa fa-angle-right'></i></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

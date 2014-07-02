@@ -1,0 +1,40 @@
+<div loader enabled='loadingDatajobs' message="'Loading Saved Jobs...'"></div>
+
+<table class='table table-striped' ng-if='!loadingDatajobs'>
+    <thead>
+        <tr>
+            <th class='col-lg-3'>Title</th>
+            <th class='col-lg-2'>User</th>
+            <th class='col-lg-3'>Description</th>
+            <th class='col-lg-2'>Created</th>
+            <th class='col-lg-2'>Last Edited</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat='datajob in datajobs'>
+            <td>
+                {{ datajob.title }}
+                <ul class='list-unstyled list-inline'>
+                    <li><a ui-sref="runDatajob(datajob.id)" class='fa fa-flash'> Run</a></li>
+                    <li><a ng-click="deleteDatajob(datajob.id)" class='fa fa-times-circle'> Delete</a></li>
+                </ul>
+            </td>
+            <td>{{ datajob.user.name }}</td>
+            <td>{{ datajob.description }}</td>
+            <td>{{ datajob.created }}</td>
+            <td>{{ datajob.updated }}</td>
+        </tr>
+        <tr ng-if='!datajobs.length'>
+            <td colspan=5>No saved jobs.</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class='pager' ng-if='!loadingDataobs'>
+    <li ng-if='pageBackward'>
+        <a ng-click='fetchDatajobs(-stepSize)'><span class='fa fa-angle-left'></span> Previous</a>
+    </li>
+    <li ng-if='pageForward'>
+        <a ng-click='fetchDatajobs(stepSize)'>Next <span class='fa fa-angle-right'></span></a>
+    </li>
+</ul>

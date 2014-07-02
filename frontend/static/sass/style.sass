@@ -1,0 +1,87 @@
+@import "loader"
+@import "bootstrap"
+@import "bootswatch"
+
+a, a:hover, a:active, a:visited
+    text-decoration: none !important
+
+body
+    background-color: desaturate(darken($brand-primary, 25%), 20%)
+
+table
+    background-color: #fff
+    border-radius: 4px
+    overflow: hidden
+
+    tr
+
+        td:first-child, th:first-child
+            padding-left: 15px
+
+        td:last-child, th:last-child
+            padding-right: 15px
+
+.page-header h1
+    color: #fff
+
+.white
+    color: #fff !important
+
+.nav-pills > li > a
+    color: lighten($brand-primary, 20%)
+    background-color: darken($brand-primary, 20%)
+    margin-left: 6px
+
+    &:hover
+        color: $brand-primary
+        background-color: lighten($brand-info, 35%)
+
+.navbar
+    border-radius: 0
+
+.panel
+    border-width: 0px !important
+    overflow: hidden
+
+.CodeMirror *
+    line-height: 1.25
+    font-family: "source-code-pro", sans-serif !important
+
+/* Spark Editor */
+
+pre.json-results, pre.json-results code
+    background-color: transparent
+    border-color: transparent
+
+/* Progress bar shit */
+
+.large-progress
+
+    .progress
+        max-width: 400px
+        margin: 12px auto
+
+.CodeMirror
+
+    height: 600px
+
+.workflow-next
+
+    text-align: center
+    color: $brand-info
+    font-size: 24px
+    margin-bottom: 20px
+
+.add-more-lg
+
+    text-align: center
+    cursor: pointer    
+    font-size: 24px
+    padding: 60px 0 
+
+    &:hover
+        color: $brand-info 
+        
+.footer
+    background-color: #e6e6e6
+    border-top: 0px solid #e6e6e6

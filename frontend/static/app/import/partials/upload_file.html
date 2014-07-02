@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class='row-fluid'>
+
+        <div class='page-header col-lg-12'>
+            <h1>Upload A Data File</h1>
+        </div>
+
+        <div class='col-lg-offset-1 col-lg-11'>
+
+            <p class='lead'>
+                You can directly import CSV and JSON data to be used within quarry. Quarry will attempt to automatically attempt to parse the structure of your data so you don't have to input it's structure by hand, and then create a table so you can directly query and interact with your data. But first, we'll need you to choose a file to upload.
+            </p>
+
+            <button type='button' class='btn btn-primary btn-lg btn-block'>Pick A File To Upload</button>
+
+        </div>
+
+        <div class='page-header col-lg-12'>
+            <h1>Determine Data Structure</h1>
+        </div>
+
+
+        <div class='col-lg-offset-1 col-lg-11'>
+
+            <p class='lead'>
+                Quarry has made it's best guess about how your data is structured. You can view the schema Quarry has determined and a few sample parsed data points below.
+            </p>
+
+            <h2>Table Schema</h2>
+
+            <table class='table table-striped'>
+                <thead>
+                    <tr>
+                        <th class='col-lg-6'>Field Name</th>
+                        <th class='col-lg-6'>Field Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type='text' value='id'/></td>
+                        <td>
+                            <select>
+                                <option selected>integer</option>
+                                <option>float</option>
+                                <option>string</option>
+                                <option>date</option>
+                                <option>datetime</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type='text' value='username'/></td>
+                        <td>
+                            <select>
+                                <option>integer</option>
+                                <option>float</option>
+                                <option selected>string</option>
+                                <option>date</option>
+                                <option>datetime</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type='text' value='joined'/></td>
+                        <td>
+                            <select>
+                                <option>integer</option>
+                                <option>float</option>
+                                <option>string</option>
+                                <option>date</option>
+                                <option selected>datetime</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Sample Data Points</h2>
+
+            <table class='table table-striped'>
+                <thead>
+                    <tr>
+                        <th class='col-lg-6'>Field Name</th>
+                        <th class='col-lg-6'>Field Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>id</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>username</td>
+                        <td>Brian Brunner</td>
+                    </tr>
+                    <tr>
+                        <td>joined</td>
+                        <td>2014-02-26 00:10:00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class='table table-striped'>
+                <thead>
+                    <tr>
+                        <th class='col-lg-6'>Field Name</th>
+                        <th class='col-lg-6'>Field Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>id</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>username</td>
+                        <td>Brian Brunner</td>
+                    </tr>
+                    <tr>
+                        <td>joined</td>
+                        <td>2014-02-26 00:10:00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class='table table-striped'>
+                <thead>
+                    <tr>
+                        <th class='col-lg-6'>Field Name</th>
+                        <th class='col-lg-6'>Field Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>id</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>username</td>
+                        <td>Brian Brunner</td>
+                    </tr>
+                    <tr>
+                        <td>joined</td>
+                        <td>2014-02-26 00:10:00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type='button' class='btn btn-primary btn-lg btn-block'>Confirm Data Format</button>
+
+        </div>
+        
+        <div class='page-header col-lg-12'>
+            <h1>Name Your Dataset</h1>
+        </div>
+
+
+        <div class='col-lg-offset-1 col-lg-11'>
+
+            <p class='lead'>
+                Finally, we need you to pick a name for your dataset and give it a description.
+            </p>
+
+            <input type='text' class='form-control' value='Users' />
+
+            <textarea class='form-control'></textarea>
+
+            <button type='button' class='btn btn-primary btn-lg btn-block'>Submit Dataset Name and Description</button>
+
+        </div>
+
+    </div>
+
+{% endblock %}

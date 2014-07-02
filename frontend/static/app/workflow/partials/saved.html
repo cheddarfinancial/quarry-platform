@@ -1,0 +1,50 @@
+<div class='row-fluid'>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Saved Workflows</h3>
+        </div>
+
+        <div loader enabled='loadingWorkflows' message="'Loading Saved Workflows...'"></div>
+
+        <table class='table table-striped' ng-if='!loadingWorkflows'>
+            <thead>
+                <tr>
+                    <th class='col-lg-3'>Workflow Title</th>
+                    <th class='col-lg-2'>User</th>
+                    <th class='col-lg-2'>Description</th>
+                    <th class='col-lg-2'>Created</th>
+                    <th class='col-lg-2'>Last Edited</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='workflow in workflows'>
+                    <td>
+                        {{ workflow.title }}<br/>
+                        <ul class='small list-unstyled list-inline'>
+                            <li><a ui-sref='workflow.editor({workflowId: workflow.id})' class='fa fa-edit'> Edit</a></li>
+                            <li><a ng-click='!workflow.starting && execute(workflow)' class='fa fa-flash' ng-class='{ "text-muted": workflow.starting }'> Run</a></li>
+                            <li><a ng-click="deleteWorkflow(workflow.id)" class="fa fa-times-circle"> Delete</a></li>
+                        </ul>
+                    </td>
+                    <td>{{ workflow.user.name }}</td>
+                    <td>{{ workflow.description }}</td>
+                    <td>{{ workflow.created }}</td>
+                    <td>{{ workflow.updated }}</td>
+                    <td>
+                    </td>
+                </tr>
+                <tr ng-if='!workflows.length'>
+                    <td class='text-muted'>No saved workflows. <a ui-sref='workflow.editor'>Go create one now!</a></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

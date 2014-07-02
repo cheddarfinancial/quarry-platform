@@ -1,0 +1,108 @@
+<!-- SPARK EDITOR -->
+<!-- Use ng-style instead of ng-if because ng-if messes up codemirror -->
+<div class='row-fluid bottom-1' ng-style='{ "display": ((showEditor) ? "block" : "none") }'>
+
+    <div class='col-lg-3'>
+
+        <div class='list-group'>
+            <a class='list-group-item active'>Query Settings</a>
+            <span class='list-group-item'>
+                <div cluster-manager on-select='selectedCluster' on-empty='noClusters'></div>
+            </span>
+            <span class='list-group-item form-group'>
+                <label class='control-label'>Job Priority</label>
+                <select class='form-control' ng-model='priority'>
+                    <option value='verylow'>Very Low</option>
+                    <option value='low'>Low</option>
+                    <option value='default'>Default</option>
+                    <option value='high'>High</option>
+                    <option value='veryhigh'>Very High</option>
+                </select>
+            </span>
+            <span class='list-group-item form-group'>
+                <label class='control-label'>Job Name</label>
+                <input class='form-control' ng-model='jobName' placeholder="Untitled"></input>
+            </span>
+        </div>
+
+    </div>
+
+    <div class='col-lg-9'>
+
+        <div class='alert alert-dismissable alert-danger' ng-if='error'>
+            <button type="button" class="close" ng-click='dismissError()'>×</button>
+            {{ error }}
+        </div>
+
+        <div class='col-lg-12 well'>
+            <div class='form-group'>
+                <div class='col-lg-12'>
+                    <ui-codemirror ui-codemirror-opts='sparkEditorOptions' ng-model='python'></ui-codemirror>
+                    <span class='help-block'>
+                        Enter your python/spark job here. For a an introduction to pyspark, 
+                        you can refer to
+                        <a href='http://spark.apache.org/docs/0.9.0/python-programming-guide.html'>this quickstart guide</a>.
+                        For a more in depth look, you can read through the pyspark documentation
+                        <a href='http://spark.apache.org/docs/0.9.0/api/pyspark/index.html'>available here</a>.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class='col-lg-12 bottom-1'>
+            <button type="button" class="btn btn-primary btn-lg btn-block" ng-click='executeJob()' ng-disabled='!cluster'>
+                Run Job
+            </button>
+        </div>
+
+        <div class='col-lg-6'>
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click='testJob()' ng-disabled='!cluster'>
+                Test Job
+            </button>
+        </div>
+
+        <div class='col-lg-6'>
+            <button ng-click="saveJob()" type="button" class="btn btn-default btn-lg btn-block">
+                Save Job
+            </button>
+        </div>
+
+    </div>
+
+    <hr ng-if='results' class='col-lg-12' />
+
+</div>
+
+<!-- SPARK RESULTS -->
+<div class='row-fluid' ng-if='results'>
+
+    <div class="col-lg-3 bottom-1">
+        <button type="button" class="btn btn-primary btn-lg btn-block" ng-click='toggleEditor()'>
+            <span ng-if='!showEditor'>Show</span> 
+            <span ng-if='showEditor'>Hide</span> 
+            Editor
+        </button>
+    </div>
+    <div class="col-lg-3 col-lg-offset-3 bottom-1">
+        <button type="button" class="btn btn-info btn-lg btn-block" ng-click='saveResults()'>Save Results</button>
+    </div>
+
+    <div class="col-lg-3 bottom-1">
+        <button type="button" class="btn btn-danger btn-lg btn-block" ng-click='clearResults()'>Clear Results</button>
+    </div>
+
+    <div class='well col-lg-12'>
+        <pre class='json-results'><code>{{ results }}</code></pre>
+    </div> 
+
+</div>
+
+<!-- SPARK LOADING -->
+<div class='row-fluid bottom-1 large-progress' ng-if='status'>
+
+    <div class='col-lg-12'>
+        <div loader enabled='status' message='status' task-progress="taskProgress" stage-progress='stageProgress'></div>
+    </div>
+
+</div>
+

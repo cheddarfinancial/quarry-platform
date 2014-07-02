@@ -1,0 +1,52 @@
+<div class='row-fluid'>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Import data into Quarry</h3>
+        </div>
+        <div class="panel-body">
+            <p>To get started, you'll need to import some data into your quarry. You can import from many different sources with a few simple wizards and tools. Data imported into Quarry is stored securely using Amazon S3 and can be easily exported at any time in the future.</p>
+        </div>
+
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th class='col-lg-2'>Data Source</th>
+                    <th></th>
+                    <th class='col-lg-3'></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>External Database</td>
+                    <td>Connect an external database (such as MySQL, PostgreSQL, MongoDB or ElasticSearch) to be able to directly query it's data and run analytics on it.</td>
+                    <td><a ui-sref='import.wizard-database'>Database Connection Wizard <span class="glyphicon glyphicon-chevron-right"></span></a></td>
+                </tr>
+                <!--
+                <tr>
+                    <td>Upload Files</td>
+                    <td>Directly upload raw data files, such as log files, CSVs, and JSON row data, using a web interface. This works best for smaller files that are under 100 megabytes in size.</td>
+                    <td><a href='/import/upload_file'>Upload File Wizard <span class="glyphicon glyphicon-chevron-right"></span></a></td>
+                </tr>
+                <tr>
+                    <td>Bulk Upload Tool</td>
+                    <td>Directly upload raw data files, such as log files, CSVs, and JSON row data, using a desktop tool that will run uploads in parallel and can resume failed uploads. Best for files that are greater that 100 megabytes in size.</td>
+                    <td><a>Download Bulk Upload Tool <span class="glyphicon glyphicon-chevron-right"></span></a></td>
+                </tr>
+                <tr>
+                    <td>Server Logs</td>
+                    <td>You can install the Fluentd daemon on all of your servers to process and upload your log files in realtime. There are open source plugins available that allow you to deeply integrate fluentd with many popular databases and servers.</td>
+                    <td><a>Fluentd for log files<span class="glyphicon glyphicon-chevron-right"></span></a></td>
+                </tr>
+                <tr>
+                    <td>Custom Streaming Data</td>
+                    <td>You can stream custom data in real-time using Fluentd. Fluentd is easy to integrate and has native libraries for many popular languages.</td>
+                    <td><a>Fluentd for streaming data <span class="glyphicon glyphicon-chevron-right"></span></a></td>
+                </tr>
+                -->
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

@@ -1,0 +1,5 @@
+src/
+*.pyc
+.DS_Store
+
+mixingboard.yml

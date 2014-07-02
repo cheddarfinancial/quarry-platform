@@ -1,0 +1,40 @@
+zk-hosts:
+    - zk1.example.com
+    - zk2.example.com
+    - zk3.example.com
+
+default_vpc: "vpc-123456789"
+default_subnet: "subnet-123456789"
+
+hive_db_root:
+    host: "hive-db.example.com"
+    password: "user"
+    user: "password"
+
+rabbitmq:
+    host: "rabbit.example.com"
+    port: "5672"
+
+redis:
+    host: "redis.example.com"
+    port: "6379"
+
+spark_ami: "ami-12345678"
+
+user_db:
+    database: "user"
+    host: "user-db.example.com"
+    user: "user"
+    password: "password"
+
+webserver_sg: "sg-12345678"
+
+zookeeper_sg: "sg-12345678"
+
+s3_bucket: "s3-bucket-name"
+
+aws_key: "aws-key-id"
+aws_secret: "aws-key-secret"
+
+key_pair: "key-pair-name"
+~

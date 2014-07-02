@@ -1,0 +1,33 @@
+<div class='row-fluid'>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Saved Export Jobs</h3>
+        </div>
+
+        <div loader enabled='loadingExports' message="'Loading Saved Export Jobs...'"></div>
+
+        <table class='table table-striped' ng-if='datajobs'>
+            <thead>
+                <tr>
+                    <th class='col-lg-2'>Export Title</th>
+                    <th class='col-lg-1'>User</th>
+                    <th class='col-lg-2'>Description</th>
+                    <th class='col-lg-2'>Created</th>
+                    <th class='col-lg-2'>Last Edited</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='datajob in datajobs'>
+                    <td>{{ datajob.title }}</td>
+                    <td>{{ datajob.user.name }}</td>
+                    <td>{{ datajob.description }}</td>
+                    <td>{{ datajob.created }}</td>
+                    <td>{{ datajob.updated }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>

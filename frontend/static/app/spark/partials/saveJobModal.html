@@ -1,0 +1,39 @@
+<!-- SAVE QUERY MODAL -->
+<div class="modal-header">
+    <h3>Save Your Job</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal">
+
+        <div class='alert alert-dismissable alert-danger' ng-if='saveJobError'>
+            <button type="button" class="close" ng-click='dismissSaveJobError()'>×</button>
+            {{ saveJobError }}
+        </div>
+
+        <div class='loader-wrap' ng-if="savingJob">
+            <div class='loader'></div>
+            <div class='loader-status'>Saving job...</div>
+        </div>
+
+        <fieldset ng-if='!savingJob'>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Title</label>
+                <div class="col-lg-10">
+                    <input ng-model='job.title' type="text" class="form-control" placeholder="Give your job a title">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Description</label>
+                <div class="col-lg-10">
+                    <textarea ng-model='job.description' type="text" class="form-control" placeholder="Describe what your job does"></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+    </form>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="dismissSaveJobModal()">Cancel</button>
+    <button class="btn btn-primary" ng-click="saveJob(job.title, job.description)">Save Job</button>
+</div>

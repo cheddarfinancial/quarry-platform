@@ -1,0 +1,28 @@
+<div loader enabled='status' message='status'></div>
+<table class='table table-striped' class='form-group' ng-hide='status'>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Cluster Name</th>
+            <th>Cluster Status</th>
+            <th>Number Of Workers</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class='lead' ng-repeat="(id, info) in clusters">
+            <td>
+                <input type='radio' ng-hide='status' ng-model='data.selectedCluster' ng-change="onSelectCluster(data.selectedCluster)" ng-value='id' name='selectedCluster' />
+            </td>
+            <td>{{ id }}</td>
+            <td>
+                <span ng-class='{ "text-success": info.status == "Running", "text-info": info.status != "Running" }'>
+                    {{ info.status }}
+                </span>
+            </td>
+            <td>{{ info.services['spark-worker'] }} / {{ info.workers }}</td>
+        </tr>
+    </tbody>
+</table>
+<p class='lead text-warning' ng-if='!hideWarning && selectedCluster && !clusters[selectedCluster].alive'>
+    <i class='fa fa-asterisk'></i> You must wait until a cluster is launched to be able to use it.
+</p>

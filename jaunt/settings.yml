@@ -1,0 +1,67 @@
+JOB_SERVER:
+    HOST: 54.186.38.201
+    PORT: 5000
+
+JOBS:
+    MYSQL:
+
+        OPTIONS:
+            host:
+              TYPE: string
+              REQUIRED: true
+            dbuser:
+              TYPE: string
+              REQUIRED: true
+            password:
+              TYPE: string
+              REQUIRED: true
+
+        INSPECT_MODULE: jobs.mysql
+
+        DESCRIBE_MODULE: jobs.mysql
+        DESCRIBE_OPTIONS:
+            database:
+              TYPE: string
+              REQUIRED: true
+            table:
+              TYPE: string
+              REQUIRED: true
+
+        IMPORT_FILE: jobs/mysql/import.py
+        IMPORT_OPTIONS:
+            table:
+                TYPE: string
+                REQUIRED: true
+            database:
+                TYPE: string
+                REQUIRED: true
+            splitBy:
+                TYPE: string
+                REQUIRED: false
+                DEFAULT: id
+            numSplits:
+                TYPE: int
+                REQUIRED: false
+                DEFAULT: 10
+            columns:
+                TYPE: string
+                REQUIRED: false
+                DEFAULT: "*"
+            sharkTable:
+                TYPE: string
+                REQUIRED: true
+            importType:
+                TYPE: string
+                REQUIRED: true
+
+        EXPORT_FILE: jobs/mysql/export.py
+        EXPORT_OPTIONS:
+            dataset:
+                TYPE: string
+                REQUIRED: true
+            table:
+                TYPE: string
+                REQUIRED: true
+            database:
+                TYPE: string
+                REQUIRED: true

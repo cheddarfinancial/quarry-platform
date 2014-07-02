@@ -1,0 +1,5 @@
+flask==0.10.1
+boto==2.27.0
+requests==2.2.1
+-e git+git@github.com:quarryio/mixingboard.git#egg=mixingboard
+-e git+git@github.com:quarryio/chassis.git#egg=chassis

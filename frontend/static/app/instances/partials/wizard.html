@@ -1,0 +1,79 @@
+<!-- SET UP CREDENTIALS -->
+<div class='row-fluid white'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Launch New Cluster</h1>
+    </div>
+
+</div>
+
+<div class='row-fluid white' ng-style="{ display: (launching) ? 'none' : 'block' }">
+
+    <!-- ERROR DISPLAY -->
+    <div class='col-lg-11 col-lg-offset-1 bottom-1' ng-if='error'>
+
+        <div class='alert alert-dismissable alert-danger'>
+            <button type="button" class="close" ng-click='dismissError()'>×</button>
+            <strong>Something went wrong!</strong>
+            {{ error }}
+        </div>
+
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+
+        <div class='form-group'>
+            <label class='control-label col-lg-2' for='username'>Cluster Name</label>
+            <div class='col-lg-10'>
+                <input class='form-control' ng-model='clusterName' placeholder='A descriptive name for your new cluster'>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+
+        <div class='form-group'>
+            <label class='control-label col-lg-2' for='username'>Workers</label>
+            <div class='col-lg-10'>
+                <input type='text' class='form-control' placeholder='Number of Workers To Launch' ng-model='workers'/>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+
+        <div class='form-group'>
+            <label class='control-label col-lg-2' for='address'>Spot Pricing</label>
+            <div class='col-lg-10'>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model='spot'> Use spot pricing for this cluster
+                    </label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1'>
+        <button ng-click='launchCluster(clusterName, workers, spot)' type='button' class='btn btn-primary btn-lg btn-block'>Launch Cluster</button>
+    </div>
+
+</div>
+
+<!-- SPARK LOADING -->
+<div class='row-fluid bottom-1' ng-if='launching'>
+
+    <div class='col-lg-12'>
+        <div class='loader-wrap'>
+            <div class='loader'></div>
+            <div class='loader-status'>
+                Launching your cluster...
+            </div>
+        </div>
+    </div>
+
+</div>
+

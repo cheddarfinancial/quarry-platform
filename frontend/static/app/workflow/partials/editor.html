@@ -1,0 +1,378 @@
+<div class='row-fluid' ng-if='!loadingWorkflow'>
+
+    <div class='col-lg-12'>
+
+        <div class='panel panel-primary'>
+            <div class="panel-heading">
+                <h3 class="panel-title">Workflow Settings</h3>
+            </div>
+            <div class='panel-body'>
+
+                <div class='col-lg-12' ng-if='errors.top'>
+
+                    <div class='alert alert-dismissable alert-danger'>
+                        <button type="button" class="close" ng-click='dismissError("top")'>×</button>
+                        <strong>Something went wrong!</strong>
+                        <div ng-repeat="error in errors.top">
+                            {{ error }}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class='col-lg-12 bottom-1'>
+
+                    <div class='form-group'>
+                        <label class='control-label col-lg-2' for='title'>Title</label>
+                        <div class='col-lg-10'>
+                            <input id='title' type='text' class='form-control' placeholder='Enter a title' ng-model='workflow.title'/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class='col-lg-12 bottom-1'>
+
+                    <div class='form-group'>
+                        <label class='control-label col-lg-2' for='description'>Description</label>
+                        <div class='col-lg-10'>
+                            <input id='description' type='text' class='form-control' placeholder='Enter a description' ng-model='workflow.description'/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class='col-lg-12 bottom-1'>
+
+                    <div class='form-group'>
+                        <label class='control-label col-lg-2' for='schedule'>Schedule</label>
+                        <div class='col-lg-10'>
+                            <input id='description' type='text' class='form-control' placeholder='Enter a schedule' ng-model='workflow.schedule'/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class='col-lg-12 bottom-1'>
+
+                    <div class='form-group'>
+                        <label class='control-label col-lg-2' for='schedule'>Notifications</label>
+                        <div class='col-lg-10'>
+                            <ul class='list-unstyled list-inline'>
+                                <li><input type='radio' ng-model='workflow.notify' name='notifyUsers' value='none'> None</input></li>
+                                <li><input type='radio' ng-model='workflow.notify' name='notifyUsers' value='all'> Everyone</input></li>
+                                <li><input type='radio' ng-model='workflow.notify' name='notifyUsers' value='custom'> Let Me Choose</input></li>
+                            </ul>
+                            <select multiple ng-model='workflow.notifyUsers' class='form-control' ng-disabled='workflow.notify != "custom"' 
+                                ng-options='user.id as user.name for user in thisUser.account.users'></select> 
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class='white page-header col-lg-12'>
+        <h1>Workflow Steps</h1>
+    </div>
+
+    <div class='col-lg-12'>
+
+        <div class='panel panel-info'>
+            <div class="panel-heading">
+                <h3 class="panel-title">Choose A Cluster To Use</h3>
+            </div>
+            <div class='panel-body'>
+
+                <div class='col-lg-12' ng-if='errors.cluster'>
+
+                    <div class='alert alert-dismissable alert-danger'>
+                        <button type="button" class="close" ng-click='dismissError("cluster")'>×</button>
+                        <strong>Something went wrong!</strong>
+                        <div ng-repeat="error in errors.cluster">
+                            {{ error }}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class='col-lg-12 bottom-1'>
+
+                    <div class='form-group'>
+                        <label class='control-label col-lg-2' for='clusterAction'>Launch New or Use Existing?</label>
+                        <div class='col-lg-4'>
+                            <select class='form-control' id='clusterAction' ng-model='workflow.cluster.action'>
+                                <option value='start'>Launch A New Cluster Just For This Job</option>
+                                <option value='pick'>Choose an Existing Cluster To Run This Job On</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <span ng-show='workflow.cluster.action == "start"'>
+
+                    <div class='col-lg-12 bottom-1'>
+
+                        <div class='form-group'>
+                            <label class='control-label col-lg-2' for='clusterName'>Cluster Name</label>
+                            <div class='col-lg-10'>
+                                <input id='description' type='text' class='form-control' placeholder='Enter a name for your new cluster' ng-model='workflow.cluster.name'/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class='col-lg-12 bottom-1'>
+
+                        <div class='form-group bottom-1'>
+                            <label class='control-label col-lg-2' for='workers'>Workers</label>
+                            <div class='col-lg-10'>
+                                <input id='workers' type='text' class='form-control' placeholder='Enter the number of workers for this cluster' ng-model='workflow.cluster.workers'/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </span>
+
+                <span ng-show='workflow.cluster.action == "pick"'>
+
+                    <div class='col-lg-12 bottom-1'>
+                        <div cluster-manager template='full' on-select='selectedCluster' on-empty='noClusters' hide-warning='true'></div>
+                    </div>
+
+                </span>
+
+            </div>
+        </div>
+
+        <div class='col-lg-12 fa fa-arrow-down workflow-next'></div>
+
+        <span ng-repeat='step in workflow.steps'>
+
+            <div class='col-lg-12'>
+
+                <div class='panel panel-info'>
+                    <div class="panel-heading">
+                        <h3 class="panel-title pull-left">Workflow Step</h3>
+                        <a ng-click='removeStep(step._id)' class='fa fa-times-circle pull-right white'></a>
+                        <div class='clearfix'></div>
+                    </div>
+                    <div class='panel-body'>
+                        
+                        <div class='col-lg-12' ng-if='errors.steps[$index]'>
+
+                            <div class='alert alert-dismissable alert-danger'>
+                                <button type="button" class="close" ng-click='dismissError("steps", $index)'>×</button>
+                                <strong>Something went wrong!</strong>
+                                <div ng-repeat="error in errors.steps[$index]">
+                                    {{ error }}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class='col-lg-12 bottom-1'>
+
+                            <div class='form-group'>
+                                <label class='control-label col-lg-2' for='clusterAction'>Step Type</label>
+                                <div class='col-lg-4'>
+                                    <select class='form-control' id='clusterAction' ng-model='step.type' ng-options='name as info.description for (name, info) in stepTypes' ng-change='stepTypeChanged(step)'></select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div ng-show='step.type == "sql"' class='col-lg-12 bottom-1'>
+
+                            <div class='form-group bottom-1'>
+                                <label class='control-label col-lg-2' for='query'>SQL Query</label>
+                                <div class='col-lg-10'>
+                                    <ul class='list-unstyled list-inline'>
+                                        <li>
+                                            <input value='saved' type='radio' name='queryType' ng-model='step.queryType'>
+                                            Saved Query
+                                        </li>
+                                        <li>
+                                            <input value='ad-hoc' type='radio' name='queryType' ng-model='step.queryType'>
+                                            Ad-hoc Query
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class='col-lg-12' ng-if='step.queryType == "saved"'>
+                                    <div ng-if='step.query && !step._picking'>
+                                        <table class='table table-striped'>
+                                            <thead>
+                                                <tr>
+                                                    <th class='col-lg-4'>Title</th>
+                                                    <th class='col-lg-4'>SQL</th>
+                                                    <th class='col-lg-4'>Description</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ step.query.title }}</td>
+                                                    <td>{{ step.query.sql }}</td>
+                                                    <td>{{ step.query.description }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <a class='lead fa fa-edit' ng-click='step._picking = true'> Choose A Different Query</a>
+                                    </div>
+                                    <div ng-if='step._picking || !step.query'>
+                                        <p class='lead'>
+                                            Choose a query to run as part of your workflow. <a ng-if='step.query' ng-click='step._picking = false' class='fa fa-times-circle'> Cancel</a>
+                                        </p>
+                                        <div queries template='picker' on-select='pickQueryFn(step)'></div>
+                                    </div>
+                                </div>
+
+                                <div class='col-lg-12' ng-if='step.queryType == "ad-hoc"'>
+                                    <div class='form-group'>
+                                        <div class='col-lg-10 col-lg-offset-2'>
+                                            <textarea class='form-control' ng-model='step.sql'></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div ng-show='step.type == "python"' class='col-lg-12 bottom-1'>
+
+                            <div class='form-group bottom-1'>
+                                <label class='control-label col-lg-2' for='job'>Python Job</label>
+                                <div class='col-lg-10'>
+                                    <div ng-if='step.job && !step._picking'>
+                                        <table class='table table-striped'>
+                                            <thead>
+                                                <tr>
+                                                    <th class='col-lg-6'>Title</th>
+                                                    <th class='col-lg-6'>Description</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ step.job.title }}</td>
+                                                    <td>{{ step.job.description }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <a class='lead fa fa-edit' ng-click='step._picking = true'> Choose A Different Job</a>
+                                    </div>
+                                    <div ng-if='step._picking || !step.job'>
+                                        <p class='lead'>
+                                            Choose a job to run as part of your workflow. <a ng-if='step.query' ng-click='step._picking = false' class='fa fa-times-circle'> Cancel</a>
+                                        </p>
+                                        <div jobs template='picker' on-select='pickJobFn(step)'></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div ng-show='step.type == "import"' class='col-lg-12 bottom-1'>
+
+                            <div class='form-group bottom-1'>
+                                <label class='control-label col-lg-2' for='import'>Import Job</label>
+                                <div class='col-lg-10'>
+                                    <div ng-if='step.datajob && !step._picking'>
+                                        <table class='table table-striped'>
+                                            <thead>
+                                                <tr>
+                                                    <th class='col-lg-6'>Title</th>
+                                                    <th class='col-lg-6'>Description</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ step.datajob.title }}</td>
+                                                    <td>{{ step.datajob.description }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <a class='lead fa fa-edit' ng-click='step._picking = true'> Choose A Different Job</a>
+                                    </div>
+                                    <div ng-if='step._picking || !step.datajob'>
+                                        <p class='lead'>
+                                            Choose a job to run as part of your workflow. <a ng-if='step.query' ng-click='step._picking = false' class='fa fa-times-circle'> Cancel</a>
+                                        </p>
+                                        <div datajobs template='picker' on-select='pickDatajobFn(step)' job-type='import'></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div ng-show='step.type == "export"' class='col-lg-12 bottom-1'>
+
+                            <div class='form-group bottom-1'>
+                                <label class='control-label col-lg-2' for='export'>Export Job</label>
+                                <div class='col-lg-10'>
+                                    <div ng-if='step.datajob && !step._picking'>
+                                        <table class='table table-striped'>
+                                            <thead>
+                                                <tr>
+                                                    <th class='col-lg-6'>Title</th>
+                                                    <th class='col-lg-6'>Description</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ step.datajob.title }}</td>
+                                                    <td>{{ step.datajob.description }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <a class='lead fa fa-edit' ng-click='step._picking = true'> Choose A Different Job</a>
+                                    </div>
+                                    <div ng-if='step._picking || !step.datajob'>
+                                        <p class='lead'>
+                                            Choose a job to run as part of your workflow. <a ng-if='step.query' ng-click='step._picking = false' class='fa fa-times-circle'> Cancel</a>
+                                        </p>
+                                        <div datajobs template='picker' on-select='pickDatajobFn(step)' job-type='export'></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class='col-lg-12 fa fa-arrow-down workflow-next'></div>
+
+        </span>
+
+    </div>
+
+    <div class='col-lg-12'>
+
+        <div class='well well-lg add-more-lg' ng-click="addNewStep()">
+            <span class='text fa fa-plus-circle'> Add New Workflow Step</span>
+        </div>
+
+    </div>
+
+    <div class='col-lg-12'>
+        <a class='btn btn-lg btn-block btn-primary' ng-click='saveWorkflow(workflow)'>Save Workflow</a>
+    </div>
+
+</div>
+
+<!-- QUERY LOADING -->
+<div class='row-fluid bottom-1'>
+
+    <div class='col-lg-12'>
+        <div loader enabled='loadingWorkflow' message='"Loading workflow..."'></div>
+    </div>
+
+</div>

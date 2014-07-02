@@ -1,0 +1,39 @@
+<!-- SAVE QUERY MODAL -->
+<div class="modal-header">
+    <h3>Save Your Query</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal">
+
+        <div class='alert alert-dismissable alert-danger' ng-if='saveQueryError'>
+            <button type="button" class="close" ng-click='dismissSaveQueryError()'>×</button>
+            {{ saveQueryError }}
+        </div>
+
+        <div class='loader-wrap' ng-if="savingQuery">
+            <div class='loader'></div>
+            <div class='loader-status'>Saving query...</div>
+        </div>
+
+        <fieldset ng-if='!savingQuery'>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Title</label>
+                <div class="col-lg-10">
+                    <input ng-model='query.title' type="text" class="form-control" placeholder="Give your query a title">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label">Description</label>
+                <div class="col-lg-10">
+                    <textarea ng-model='query.description' type="text" class="form-control" placeholder="Describe what your query does"></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+    </form>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="dismissSaveQueryModal()">Cancel</button>
+    <button class="btn btn-primary" ng-click="saveQuery(query.title, query.description)">Save Query</button>
+</div>

@@ -1,0 +1,12 @@
+<div class='loader-wrap' ng-if='enabled'>
+    <div class='loader'></div>
+    <div class='loader-status'>
+        {{ message }}
+        <div class="progress" ng-if="taskProgress">
+            <div class="progress-bar progress-bar-info" ng-style="{ width: ''+taskProgress+'%' }"></div>
+        </div>
+        <div class="progress" ng-if="stageProgress">
+            <div class="progress-bar" ng-style="{ width: ''+stageProgress+'%' }"></div>
+        </div>
+    </div>
+</div>

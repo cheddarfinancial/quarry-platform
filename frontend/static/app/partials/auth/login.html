@@ -1,0 +1,52 @@
+<div class='row-fluid'>
+
+    <div class='col-lg-6 col-lg-offset-3 well'>
+
+        <form class="form-horizontal" ng-if="!signingIn">
+
+            <fieldset>
+
+                <legend>Sign In</legend>
+
+                <div class="alert alert-dismissable alert-danger" ng-if='error'>
+                    <button type="button" class="close" ng-click="dismissError()">×</button>
+                    <strong>There's a problem!</strong> {{ error }}
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" ng-model='email' placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Password</label>
+                    <div class="col-lg-10">
+                        <input type="password" class="form-control" ng-model='password' placeholder="Password">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model='keep'> Keep Me Logged In
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button ng-click='signin(email, password, keep)' class="btn btn-primary btn-block">Sign In</button>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        </form>
+ 
+        <div ng-if='signingIn' class='loader-wrap'>
+            <div class='loader'></div>
+            <div class='loader-status'>
+                Signing in...
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,36 @@
+<div class='row-fluid'>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Running Jobs</h3>
+        </div>
+
+        <div class='loader-wrap' ng-if='loadingJobs'>
+            <div class='loader'></div>
+            <div class='loader-status'>
+                Loading Running Jobs...        
+            </div>
+        </div>
+
+        <table class='table table-striped' ng-if="contexts">
+            <thead>
+                <tr>
+                    <th class='col-lg-6'>Job Name</th>
+                    <th class='col-lg-6'>Started</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='context in contexts'>
+                    <td>{{ context.name }}</td>
+                    <td>{{ context.created }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class='row-fluid'>
+            <h2 class='col-lg-12' ng-if="!loadingJobs && !contexts.length">No running jobs</h2>
+        </div>
+
+    </div>
+
+</div>

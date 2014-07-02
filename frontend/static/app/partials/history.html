@@ -1,0 +1,50 @@
+<div class='row-fluid'>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ name }} History</h3>
+        </div>
+
+        <div loader enabled='loadingHistory' message='"Loading history..."'></div>
+
+        <table class='table table-striped' ng-if='!loadingHistory'>
+            <thead>
+                <tr>
+                    <th class='col-lg-3'>Name</th>
+                    <th class='col-lg-2'>Event Type</th>
+                    <th class='col-lg-2'>User</th>
+                    <th class='col-lg-2'>Time</th>
+                    <th class='col-lg-3'></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='history in histories'>
+                    <td>{{ history.data.jobName }}</td>
+                    <td>{{ eventMap[history.event] || history.event }}</td>
+                    <td>{{ history.user_id }}</td>
+                    <td>{{ history.created }}</td>
+                    <td>
+                        <span ng-if='actions[history.event]'>
+                            <a ng-click='actions[history.event].action(history)'>{{ actions[history.event].name }}</a>
+                            {{ actions[history.event].action }}
+                        </span>
+                    </td>
+                </tr>
+                <tr ng-if='!histories.length'>
+                    <td colspan=5>No History Available</td>
+                <tr>
+            </tbody>
+        </table>
+
+        <ul class='pager' ng-if='!loadingHistory'>
+            <li ng-if='pageBackward'>
+                <a ng-click='fetchHistory(-stepSize)'><span class='fa fa-angle-left'></span> Previous</a>
+            </li>
+            <li ng-if='pageForward'>
+                <a ng-click='fetchHistory(stepSize)'>Next <span class='fa fa-angle-right'></span></a>
+            </li>
+        </ul>
+
+    </div>
+
+</div>

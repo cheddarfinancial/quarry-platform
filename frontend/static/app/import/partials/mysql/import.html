@@ -1,0 +1,287 @@
+<!-- ERROR DISPLAY -->
+<div class='row-fluid' ng-if='errors'>
+
+    <div class='alert alert-dismissable alert-danger'>
+        <button type="button" class="close" ng-click='dismissErrors()'>×</button>
+        <strong>Something went wrong!</strong>
+        <span ng-repeat="error in errors">
+            {{ error }}
+        </span>
+    </div>
+
+</div>
+
+<!-- PICK A CLUSTER -->
+<div class='row-fluid' ng-if='step == "cluster" && !status'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Choose a Cluster to Run Your Import On</h1>
+    </div>
+    
+    <p class='lead white col-lg-11 col-lg-offset-1'>
+        Your import will run in parallel across an entire cluster,
+        which will greatly reduce the time it takes to load your data
+        into Quarry.
+    </p>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+        <div cluster-manager template='full' on-select='selectedCluster' on-empty='noClusters'></div>
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1' ng-show='cluster'>
+        <button ng-click='chooseCluster()' type='button' class='btn btn-primary btn-lg btn-block'>Choose Your Cluster</button>
+    </div>
+
+</div>
+
+<!-- SET UP CREDENTIALS -->
+<div class='row-fluid white' ng-if='step == "inspect" && !status'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Enter Your Database Credentials</h1>
+    </div>
+    
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+
+        <div class='form-group'>
+            <label class='control-label col-lg-2' for='address'>Address</label>
+            <div class='col-lg-10'>
+                <input id='address' type='text' class='form-control' placeholder='Enter address' ng-model='address'/>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+
+        <div class='form-group'>
+            <label class='control-label col-lg-2' for='username'>Username</label>
+            <div class='col-lg-10'>
+                <input id='username' type='text' class='form-control' placeholder='Enter username' ng-model='username'/>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+
+        <div class='form-group'>
+            <label class='control-label col-lg-2' for='address'>Password</label>
+            <div class='col-lg-10'>
+                <input id='password' type='password' class='form-control' placeholder='Enter password' ng-model='password'/>
+                <span class='help-block'>
+                    Database credentials are used only to gather metadata to help set up the 
+                    import process and to perform the import. We do not save your database 
+                    credentials unless you explicitly specify that you want them to be saved.
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class='page-header col-lg-12'>
+        <h1>Connect to Database</h1>
+    </div>
+
+    <p class='lead white col-lg-11 col-lg-offset-1'>
+        We will now attempt to connect to your database and gather a list of 
+        datasets available for import. After this step, you will be able to 
+        choose a dataset to import or specify a custom import query.
+    </p>
+
+    <div class='col-lg-11 col-lg-offset-1'>
+        <button ng-click='inspectDatabase(address, username, password)' type='button' class='btn btn-primary btn-lg btn-block'>Connect To Database</button>
+    </div>
+
+</div>
+
+<!-- CHOOSE DATASET TO IMPORT -->
+<div class='row-fluid' ng-if='step == "import" && !status'>
+    
+    <div class='page-header col-lg-12'>
+        <h1>Choose Data Set To Import</h1>
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1'>
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th class='col-lg-3'>Database Name</th>
+                    <th class='col-lg-3'>Table Name</th>
+                    <th class='col-lg-3'>Size</th>
+                    <th class='col-lg-3'></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='dataset in datasets'>
+                    <td>{{ dataset.database }}</td>
+                    <td>{{ dataset.table }}</td>
+                    <td>{{ dataset.info.size }} MB</td>
+                    <td><a ng-click='chooseDataset(dataset)'>Choose Import Options <span class="glyphicon glyphicon-chevron-right"></span></a></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class='lead white'>
+            You can also use the results of a custom query to perform an import. *COMING SOON!!
+        </p>
+    </div>
+
+</div>
+
+<div ng-if='step == "importOptions" && !status'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Import Options For <code>{{ dataset.database }}.{{ dataset.table }}</code></h1>
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1'>
+        <p class='lead white'>
+            By default, Quarry will import all fields from you dataset. You can uncheck any fields you do not want to import below.
+        </p>
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th class='col-lg-4'>Field Name</th>
+                    <th class='col-lg-4'>Field Type</th>
+                    <th class='col-lg-4'>Include In Import</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="column in columns">
+                    <td>{{ column.name }}</td>
+                    <td>{{ column.type }}</td>
+                    <td><input type='checkbox' name='split-field' checked ng-model='selectedColumns[column.name]'></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class='lead white'>
+            Quarry will import your data in parallel, but it needs to split your data into multiple parts that are of roughly equal size to do so. Pick a field to use as the split field in the import. Ideally, you should select a field that has a uniform distribution. In most cases, if an <code>id</code> field is available, you should use that field.
+        </p>
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th class='col-lg-4'>Field Name</th>
+                    <th class='col-lg-4'>Field Type</th>
+                    <th class='col-lg-4'>Use As Split Field</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="column in columns">
+                    <td>{{ column.name }}</td>
+                    <td>{{ column.type }}</td>
+                    <td><input name='splitBy' type='radio' value='{{ column.name }}' ng-model="splitBy"></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class='lead white'>
+            You'll need to choose a name for your dataset in Quarry. We've chosen 
+            one below based on the name of the dataset in your database, but you can change 
+            it if you'd like.
+        </p>
+        <input type='text' class='form-control bottom-1' ng-model='sharkTableName'>
+        <p class='lead white'>
+            You'll need to choose how you want to load your data into the system.
+        </p>
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th class='col-lg-2'></th>
+                    <th class='col-lg-3'>Import Type</th>
+                    <th class='col-lg-7'>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input name='importType' type='radio' value='create' ng-model="importType"></td>
+                    <td>Create Table</td>
+                    <td>Create a new table for your data. The import will fail to run if the table already exists.</td>
+                </tr>
+                <tr>
+                    <td><input name='importType' type='radio' value='append' ng-model="importType"></td>
+                    <td>Append To Table</td>
+                    <td>Add the data from this import into an existing table. This will also create the table if it doesn't exist.</td>
+                </tr>
+                <tr>
+                    <td><input name='importType' type='radio' value='overwrite' ng-model="importType"></td>
+                    <td>Overwrite Table</td>
+                    <td>Overwrite an existing table, replacing all of its data. This will still succeed if the table doesn't already exist.</td>
+                </tr>
+            </tbody>
+        </table>
+        <!--
+        <p class='lead white'>
+            By default, quarry imports the entire dataset. If you'd like, you can import only a portion of your data set. You can do so by entering filters below.
+        </p>
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th class='col-lg-3'>Field Name</th>
+                    <th class='col-lg-4'>Comparison</th>
+                    <th class='col-lg-4'>Value To Compare With</th>
+                    <th class='col-lg-2'></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>the <code>id</code> field is</td>
+                    <td>
+                        <select>
+                            <option>equal to</option>
+                            <option>greater than</option>
+                            <option>greater than or equal to</option>
+                            <option>less than</option>
+                            <option>less than or equal to</option>
+                            <option>not equal to</option>
+                        </select>
+                    </td>
+                    <td>the value <input type='text' value='5'></td>
+                    <td><a><span class="glyphicon glyphicon-remove-sign"></span> Stop Job</a></td>
+                </tr>
+            </tbody>
+        </table>
+        -->
+        <p class='lead white'>
+            You should be ready to start the import process. Hit the big button below to 
+            begin running your import.
+        </p>
+        <div class='col-lg-3'>
+            <button ng-click='beginImport(selectedColumns, splitBy, sharkTableName, importType, true)' type='button' class='btn btn-info btn-lg btn-block'>
+                Save this import job
+            </button>
+        </div>
+        <div class='col-lg-9'>
+            <button ng-click='beginImport(selectedColumns, splitBy, sharkTableName, importType, false)' type='button' class='btn btn-primary btn-lg btn-block'>
+                Begin Importing Your Data
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- SUCCESS STEP -->
+<div class='row-fluid bottom-1' ng-if='step == "success" && !status'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Success</h1>
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1'>
+        <p class='lead white'>
+            Your data has successfully been imported to <code>{{ sharkTableName }}</code>
+            and is available for use in Quarry!
+        </p>
+        <a ui-sref='index' type='button' class='btn btn-primary btn-lg btn-block'>
+            Ok!
+        </a>
+    </div>
+
+</div>
+
+<!-- OPERATION LOADING -->
+<div class='row-fluid bottom-1 large-progress' ng-if='status'>
+
+    <div class='col-lg-12'>
+        <div loader enabled='status' message='status' task-progress="taskProgress" stage-progress='stageProgress'></div>
+    </div>
+
+</div>

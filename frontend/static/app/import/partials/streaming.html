@@ -1,0 +1,105 @@
+<div class='row-fluid'>
+
+    <div class='panel panel-primary'>
+
+        <div class='panel-heading'>
+            <h3 class='panel-title'>Streaming Workers</h3>
+        </div>
+
+        <div loader enabled="loadingStreamers" message='"Loading streaming workers..."'></div>
+
+        <table class='table table-striped' ng-if='!loadingStreamers'>
+            <thead>
+                <tr>
+                    <th class='col-lg-3'>Instance Type</th>
+                    <th class='col-lg-3'>Workers</th>
+                    <th class='col-lg-3'>State</th>
+                    <th class='col-lg-3'>Launched</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='streamer in streamers'>
+                    <td>{{ streamer.type }}</td>
+                    <td>{{ streamer.info.workers }}</td>
+                    <td ng-class="{ 'text-info': streamer.state != 'running', 'text-success': streamer.state == 'running' }">{{ streamer.state }}</td>
+                    <td>{{ streamer.launch_time }}</td>
+                </tr>
+                <tr ng-if='!streamers.length'>
+                    <td colspan=5>No streaming workers.</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class='panel panel-info'>
+
+        <div class='panel-heading'>
+            <h3 class='panel-title'>Streaming Workers</h3>
+        </div>
+
+        <div loader enabled="loadingSecret" message='"Loading account info..."'></div>
+
+        <div class='col-lg-12'>
+
+            <p></p>
+            <p class='lead'>
+                With Quarry, you can stream data directly into your tables. You can import data in one of two ways.
+                You can either send data <a href='http://docs.fluentd.org/articles/in_http'>over HTTP</a> or you can 
+                stream data directly using <a href='http://docs.fluentd.org/articles/out_forward'>fluentd forwarding</a>.
+            </p>
+
+            <p class='lead'>
+                Your http endpoint is 
+            </p>
+           
+            <p class='lead'>
+                <code>http://{{ organization }}.stream.quarry.io:8888/</code>
+            </p>
+           
+            <p class='lead'>
+                and your forwarding endpoint is
+            </p>
+           
+            <p class='lead'>
+                <code>{{ organization }}.stream.quarry.io:8889</code>.
+            </p>
+
+            <p class='lead'>
+                To stream data into a table, you must specify the proper tag for your data. The tags for all of your table 
+                must start with your secret key:
+            </p>
+
+            <p class='lead'>
+                <code>{{ secret }}</code>
+            </p>
+
+            <p class='lead'>
+                To stream data to a table called <code>example</code>, your full tag would look like the following:
+            </p>
+
+            <p class='lead'>
+                <code>{{ secret }}.example</code>
+            </p>
+
+            <p class='lead'>
+                We will automatically match up the fields that you send us to the columns in your table and perform
+                any necessary typecasting. So, if <code>example</code> has the columns <code>username</code>,
+                <code>email</code> and <code>score</code>, you would send a json object that looks like the following:
+            </p>
+
+            <p>
+    <pre>
+    <code>{
+        "username": "John Smith",
+        "email": "john@smith.com",
+        "score": 9001
+    }</code>
+    </pre>
+            </p>
+
+    </div>
+
+    </div>
+
+</div>

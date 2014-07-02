@@ -1,0 +1,30 @@
+<div loader enabled='loadingDatajobs' message="'Loading Saved Jobs...'"></div>
+
+<table class='table table-striped' ng-if='!loadingDatajobs'>
+    <thead>
+        <tr>
+            <th class='col-lg-4'>Title</th>
+            <th class='col-lg-4'>Description</th>
+            <th class='col-lg-4'></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat='datajob in datajobs'>
+            <td>{{ datajob.title }}</td>
+            <td>{{ datajob.description }}</td>
+            <td><a ng-click='pickDatajob(datajob)' class='fa fa-check-circle-o'> Select</a></td>
+        </tr>
+        <tr ng-if='!datajobs.length'>
+            <td colspan=5>No saved jobs.</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class='pager' ng-if='!loadingDataobs'>
+    <li ng-if='pageBackward'>
+        <a ng-click='fetchDatajobs(-stepSize)'><span class='fa fa-angle-left'></span> Previous</a>
+    </li>
+    <li ng-if='pageForward'>
+        <a ng-click='fetchDatajobs(stepSize)'>Next <span class='fa fa-angle-right'></span></a>
+    </li>
+</ul>

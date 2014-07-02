@@ -1,0 +1,46 @@
+<!-- ERROR DISPLAY -->
+<div class='row-fluid' ng-if='error'>
+
+    <div class='alert alert-dismissable alert-danger'>
+        <button type="button" class="close" ng-click='dismissError()'>×</button>
+        <strong>Something went wrong!</strong>{{ error }}
+    </div>
+
+</div>
+
+<!-- SET UP CREDENTIALS -->
+<div class='row-fluid white' ng-hide='uploadingFile'>
+
+    <div class='page-header col-lg-12'>
+        <h1>Upload File Into <code>{{ name }}</code></h1>
+    </div>
+
+    <div class='col-lg-11 col-lg-offset-1 bottom-1'>
+
+        <div class='form-group'>
+            <label class='control-label col-lg-2' for='File'>File To Upload</label>
+            <div class='col-lg-10'>
+                <input id='username' type='file' class='form-control' placeholder='Pick a file to add to this dataset...' file-model='file'/>
+            </div>
+        </div>
+
+    </div>
+
+    <p class='lead col-lg-11 col-lg-offset-1'>
+        Click the button below to being upload the file you selected.
+    </p>
+
+    <div class='col-lg-11 col-lg-offset-1'>
+        <button ng-click='uploadFile()' type='button' class='btn btn-primary btn-lg btn-block'>Upload File</button>
+    </div>
+
+</div>
+
+<!-- LOADING -->
+<div class='row-fluid bottom-1 large-progress'>
+
+    <div class='col-lg-12'>
+        <div loader enabled='uploadingFile' message='"Uploading your file \"" + filename + "\" into the dataset \"" + name + "\"..."'></div>
+    </div>
+
+</div>

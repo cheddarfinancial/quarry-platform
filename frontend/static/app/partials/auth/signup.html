@@ -1,0 +1,69 @@
+<div class='row-fluid'>
+
+    <div class='col-lg-6 col-lg-offset-3 well'>
+
+        <form ng-if='!signingUp' class="form-horizontal">
+
+            <fieldset>
+
+                <legend>Sign Up</legend>
+
+                <div class="alert alert-dismissable alert-danger" ng-if='error'>
+                    <button type="button" class="close" ng-click="dismissError()">×</button>
+                    <strong>There's a problem!</strong> {{ error }}
+                </div>
+
+                <div class="form-group">
+                    <label for="inputUsername" class="col-lg-2 control-label">Company Name</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" ng-model='organization' placeholder="Company Name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputUsername" class="col-lg-2 control-label">Username</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" ng-model='name' placeholder="Username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" ng-model='email' placeholder="Email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Password</label>
+                    <div class="col-lg-10">
+                        <input type="password" class="form-control" ng-model='password' placeholder="Password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Invite Code</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" ng-model='inviteCode' placeholder="Invite Code">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button ng-click='signup(name, email, password, inviteCode, organization)' class="btn btn-primary btn-block">Sign Up</button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+        <div ng-if='signingUp' class='loader-wrap'>
+            <div class='loader'></div>
+            <div class='loader-status'>
+                Signing up...
+            </div>
+        </div>
+ 
+    </div>
+
+</div>

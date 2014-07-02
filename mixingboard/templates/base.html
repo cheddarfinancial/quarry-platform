@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html ng-app="mixingboard">
+<head>
+
+    <title>Mixingboard</title>
+
+    <!-- INTERNAL CSS -->
+    <link type='text/css' rel='stylesheet' href='{{ url_for("static", filename="css/bootstrap.min.css") }}'>
+    <link type='text/css' rel='stylesheet' href='{{ url_for("static", filename="css/style.css") }}'>
+
+    <!-- ANGULAR CRAP -->
+    <script src="{{ url_for('static', filename='js/angular.1.3.0-beta.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ui-bootstrap-tpls-0.10.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/angular-ui-router.0.2.10.min.js') }}"></script>
+
+    <script>
+
+        angular.module("mixingboard", [])
+            .controller("ServicesController", ["$scope", "$http", function($scope, $http) {
+            
+                $http.get("/services")
+                    .success(function(res) {
+                        $scope.services = res.services
+                    })
+
+            }])
+            .controller("ConfController", ["$scope", "$http", function($scope, $http) {
+
+                $scope.saving = {}
+
+                $http.get("/conf")
+                    .success(function(res) {
+                        for (var key in res.conf) {
+                            res.conf[key] = JSON.stringify(res.conf[key])
+                        }
+                        $scope.conf = res.conf
+                    })
+
+                $scope.setConf = function(option, value) {
+                    $scope.saving[option] = true
+                    $http.get("/conf/"+option+"/set/"+value)
+                        .success(function() {
+                            $scope.saving[option] = false
+                        })
+                }
+
+            }])
+
+    </script>
+
+</head>
+<body>
+
+    <div class='wrapper'>
+
+        <nav class='navbar navbar-inverse navbar-top'>
+
+            <div class='container'>
+
+                <a class="navbar-brand logo">mixingboard</a>
+                
+            </div>
+
+        </nav>
+
+        <div class='container'>
+
+            <div class='row' ng-controller="ServicesController">
+
+                <div class="page-header col-lg-12">
+                    <h1>Services</h1>
+                </div>
+
+                <div class='col-lg-11 col-lg-offset-1' ng-repeat="(name, service) in services">
+
+                    <p class='lead col-lg-12'><strong ng-bind='name'></strong></p>
+
+                    <div class='col-lg-11 col-lg-offset-1'>
+                        <div class='lead' ng-repeat='(key, options) in service'>
+                            <div class='col-lg-12' ng-bind='key'></div>
+                            <span class='col-lg-11 col-lg-offset-1'> 
+                                <table class='table table-striped'>
+                                    <tr ng-repeat='(option, value) in options'>
+                                        <td class='col-lg-6'><span ng-bind='option'></span> <strong>:</strong></td>
+                                        <td class='col-lg-6' ng-bind='value'></td>
+                                    </tr>
+                                </table>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class='row' ng-controller="ConfController">
+
+                <div class="page-header col-lg-12">
+                    <h1>Configuration</h1>
+                </div>
+
+                <div class='col-lg-11 col-lg-offset-1'>
+
+                    <div class="col-lg-12">
+                        <p class='lead col-lg-6'><strong>Option</strong></p>
+                        <p class='lead col-lg-6'><strong>Value</strong></p>
+                    </div>
+
+                    <div class="col-lg-12" ng-repeat="(option, value) in conf">
+                        <p class='lead col-lg-5' ng-bind="option"></p>
+                        <div class='col-lg-5'>
+                            <input class='form-control' ng-model="value" />
+                        </div>
+                        <div class='col-lg-2'>
+                            <button class='btn btn-block btn-primary' ng-click='setConf(option, value)'>
+                                <span ng-if='!saving[option]'>Update</span>
+                                <span ng-if='saving[option]'>Saving</span>
+                            </button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div style='height: 200px'></div>
+
+</body>
+</html>
