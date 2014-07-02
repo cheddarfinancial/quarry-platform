@@ -32,8 +32,12 @@ args, _ = argParser.parse_known_args()
 # put args in sensible all caps variables
 COMMAND = args.command
 REGION = args.region
-zk_hosts = os.environ["ZKHOSTS"].split("|")
-print zk_hosts
+
+zk_hosts = []
+if "ZKHOSTS" in os.environ:
+    zk_hosts = os.environ["ZKHOSTS"].split("|")
+else:
+    zk_hosts = requests.get("http://169.254.169.254/latest/user-data", timeout=0.5).json()['zk_hosts']
 
 
 AVAILABILITY_ZONE = None
@@ -509,7 +513,7 @@ def monitor(userData=None):
                 access_key_id=access_key_id,
                 access_key_secret=access_key_secret,
                 db_host=db_host,
-                region=REGION
+                bucket=getConf("s3_bucket")
             ))
 
     if "spark-master" in roles:
@@ -609,7 +613,7 @@ def monitor(userData=None):
                 iam_username_16=iam_username[:16],
                 access_key_id=access_key_id,
                 access_key_secret=access_key_secret,
-                region=REGION,
+                bucket=getConf("s3_bucket"),
                 db_host=db_host
             ))
 

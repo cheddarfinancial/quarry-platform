@@ -224,6 +224,7 @@ def launchInstances(user, account, groups, cluster=None, launchCluster=False):
                 "access_key_secret": accountObj.access_key_secret,
                 "user": user,
                 "db_host": HIVE_DB_HOST,
+                "zk_hosts": mixingboard.zk_hosts
             })
         }
 

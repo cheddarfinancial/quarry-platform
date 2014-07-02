@@ -9,9 +9,10 @@ import os
 from jinja2 import Template
 
 # Local
+import mixingboard
 
 
-MANDRILL_KEY = "rF86vm-YpF7b71rDziZ2fA"
+MANDRILL_KEY = mixingboard.getConf("mandrill_key")
 
 GREETINGS = [
     "Hey there",

@@ -1,4 +1,4 @@
-# 
+# Hosts where zookeeper is running, can be just 1 server if you want 
 zk-hosts:
     - zk1.example.com
     - zk2.example.com
@@ -38,9 +38,9 @@ redis:
 
 # The spark AMI to use when launching cluster instances. By default,
 # a quarry provided AMI will be used. You shouldn't need to change this.
-spark_ami: "ami-12345678"
+spark_ami: "ami-be00c7d6"
 
-# The security group that the
+# The security group that the webserver hosting quarry resides in, optional
 webserver_sg: "sg-12345678"
 
 # The security group your zookeeper instances are running in
@@ -56,3 +56,6 @@ aws_secret: "aws-key-secret"
 
 # The key pair to use when launching new instances
 key_pair: "key-pair-name"
+
+# mandrill api key for sending e-mail, optional
+mandrill_key: "mandrill-api-key"

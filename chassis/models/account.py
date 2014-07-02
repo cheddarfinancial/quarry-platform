@@ -115,20 +115,25 @@ class Account(Base):
         # authorize the security group to talk to itself
         securityGroup.authorize('tcp', '0', '65535', src_group=securityGroup)
 
-        # authorize the webservers to talk to this group
-        webserverGroup = ec2Conn.get_all_security_groups(group_ids=[webserver_group_id])[0]
+        try:
+            # authorize the webservers to talk to this group
+            webserverGroup = ec2Conn.get_all_security_groups(group_ids=[webserver_group_id])[0]
 
-        # authorize job server ports
-        securityGroup.authorize('tcp', '1989', '1989', src_group=webserverGroup)
-        securityGroup.authorize('tcp', '1989', '1989', cidr_ip="0.0.0.0/0") # FIXME TOO OPEN, ONLY NEEDED FOR LOCAL
+            # authorize job server ports
+            securityGroup.authorize('tcp', '1989', '1989', src_group=webserverGroup)
 
-        # authorize 100 spark context ports 
-        securityGroup.authorize('tcp', '4040', '4140', src_group=webserverGroup)
-        securityGroup.authorize('tcp', '4040', '4140', cidr_ip="0.0.0.0/0") # FIXME TOO OPEN, ONLY NEEDED FOR LOCAL
+            # authorize 100 spark context ports 
+            securityGroup.authorize('tcp', '4040', '4140', src_group=webserverGroup)
 
-        # authorize 100 spark master/worker ports 
-        securityGroup.authorize('tcp', '8080', '8180', src_group=webserverGroup)
+            # authorize 100 spark master/worker ports 
+            securityGroup.authorize('tcp', '8080', '8180', src_group=webserverGroup)
+        except: # TODO only catch exception for webserverGroup not existing
+            pass
+
+        # open for local development
         securityGroup.authorize('tcp', '8080', '8180', cidr_ip="0.0.0.0/0") # FIXME TOO OPEN, ONLY NEEDED FOR LOCAL
+        securityGroup.authorize('tcp', '1989', '1989', cidr_ip="0.0.0.0/0") # FIXME TOO OPEN, ONLY NEEDED FOR LOCAL
+        securityGroup.authorize('tcp', '4040', '4140', cidr_ip="0.0.0.0/0") # FIXME TOO OPEN, ONLY NEEDED FOR LOCAL
 
         # open up ports for streamers 
         securityGroup.authorize('tcp', '8888', '8988', cidr_ip="0.0.0.0/0")

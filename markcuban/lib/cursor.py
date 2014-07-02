@@ -8,6 +8,7 @@ from chassis.util import makeHandle
 from memoized_property import memoized_property
 
 # Local 
+import mixingboard
 
 class Cursor:
 
